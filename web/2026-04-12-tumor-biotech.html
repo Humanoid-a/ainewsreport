@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tumor &amp; Biotech Weekly Digest</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0b1020;
+      --panel: #121931;
+      --panel-2: #18213f;
+      --text: #ecf2ff;
+      --muted: #a9b5d4;
+      --accent: #70a5ff;
+      --accent-2: #7ef0c2;
+      --border: rgba(255,255,255,0.08);
+      --chip: rgba(255,255,255,0.08);
+      --shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #0a0f1f 0%, #0e1730 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+    .hero {
+      background: linear-gradient(135deg, rgba(112,165,255,0.16), rgba(126,240,194,0.10));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; }
+    .sub { color: var(--muted); margin: 8px 0 0; line-height: 1.5; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .chip {
+      background: var(--chip);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+    }
+    .stat-label { color: var(--muted); font-size: 13px; }
+    .stat-value { font-size: 28px; font-weight: 700; margin-top: 6px; }
+    .controls {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+    }
+    .control {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .control label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .control input, .control select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+    .range-line { display: flex; align-items: center; gap: 10px; }
+    .range-line input { flex: 1; }
+    .range-value { min-width: 36px; text-align: right; color: var(--accent-2); font-weight: 600; }
+    .list { display: grid; gap: 28px; margin-top: 22px; }
+    .section { display: grid; gap: 16px; }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+    }
+    .section-title { margin: 0; font-size: 22px; }
+    .section-sub { color: var(--muted); font-size: 14px; }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .card-head { display: flex; gap: 16px; justify-content: space-between; align-items: flex-start; }
+    .card h2 { margin: 0; font-size: 22px; line-height: 1.2; }
+    .card a { color: var(--text); text-decoration: none; }
+    .card a:hover { color: var(--accent); }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .badge {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .score-badge { color: var(--text); background: rgba(112,165,255,0.12); }
+    .importance-badge { color: var(--text); background: rgba(126,240,194,0.12); }
+    .summary { margin: 16px 0 10px; color: #f5f8ff; line-height: 1.6; }
+    .reason { color: var(--muted); font-size: 14px; }
+    .empty {
+      margin-top: 22px;
+      padding: 28px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+    @media (max-width: 860px) {
+      .controls { grid-template-columns: 1fr; }
+      .card-head { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1 id="report-title"></h1>
+      <p class="sub" id="report-request"></p>
+      <div class="meta-row" id="meta-row"></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Articles</div><div class="stat-value" id="stat-count">0</div></div>
+        <div class="stat"><div class="stat-label">Sources</div><div class="stat-value" id="stat-sources">0</div></div>
+        <div class="stat"><div class="stat-label">Avg relevance</div><div class="stat-value" id="stat-relevance">—</div></div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="control">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Search titles, summaries, reasons...">
+      </div>
+      <div class="control">
+        <label for="source">Source</label>
+        <select id="source">
+          <option value="">All sources</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="relevance">Minimum relevance</label>
+        <div class="range-line">
+          <input id="relevance" type="range" min="0" max="100" value="0">
+          <div class="range-value" id="relevance-value">0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="list" id="list"></section>
+    <div class="empty" id="empty" hidden>No articles match the current filters.</div>
+  </div>
+
+  <script id="report-data" type="application/json">{"title": "Tumor & Biotech Weekly Digest", "request": null, "coverage": "last 7 days (generated 2026-04-12 15:28 UTC+08:00).", "reviewed": null, "generatedAt": "2026-04-12T15:28:00+08:00", "generatedAtEpochMs": 1775978880000, "timezone": null, "articleCount": 12, "sources": ["BioPharma Dive", "Endpoints News", "STAT News"], "articles": [{"title": "More pharma dealmaking; FDA’s proposed budget; Takeda ends partnership; and more", "source": "Endpoints News", "published": "2026-04-11 18:00", "publishedAt": "2026-04-11 18:00", "publishedEpochMs": 1775901600000, "relevance": null, "importance": null, "summary": "Welcome back to another edition of Endpoints Weekly. Two of the year’s major oncology conferences are coming up soon: AACR starting April 17, and ASCO at the end of May. We’re also hosting our New ...", "reason": null, "link": "https://endpoints.news/more-pharma-dealmaking-fdas-proposed-budget-takeda-ends-partnership-and-more/"}, {"title": "FDA rejects Replimune cancer therapy, saying company didn't resolve trial doubts", "source": "Endpoints News", "published": "2026-04-11 00:16", "publishedAt": "2026-04-11 00:16", "publishedEpochMs": 1775837760000, "relevance": null, "importance": null, "summary": "The FDA has once again rejected Replimune’s oncolytic virus therapy to treat advanced melanoma. The Massachusetts-based drugmaker had been pushing for a reconsideration by the agency since the therapy was first rejected last July. At ...", "reason": null, "link": "https://endpoints.news/fda-rejects-replimune-cancer-therapy-saying-company-didnt-resolve-trial-doubts/"}, {"title": "China biotech’s CRISPR therapy suggests US drugmakers will face competition", "source": "Endpoints News", "published": "2026-04-10 23:54", "publishedAt": "2026-04-10 23:54", "publishedEpochMs": 1775836440000, "relevance": null, "importance": null, "summary": "Five people with beta thalassemia who had their blood stem cells genetically altered no longer require regular blood transfusions to stay healthy. Their Chinese-made treatment is likely to be cheaper, and perhaps safer and more ...", "reason": null, "link": "https://endpoints.news/china-biotechs-crispr-therapy-suggests-us-drugmakers-will-face-competition/"}, {"title": "STAT+: Replimune skin cancer drug that became FDA flashpoint is rejected again", "source": "STAT News", "published": "2026-04-10 23:23", "publishedAt": "2026-04-10 23:23", "publishedEpochMs": 1775834580000, "relevance": null, "importance": null, "summary": "A cancer drug candidate that, rightly or wrongly, became a flashpoint at FDA, fails on a second try at approval.", "reason": null, "link": "https://www.statnews.com/2026/04/10/skin-cancer-replimune-fda-approval/?utm_campaign=rss"}, {"title": "Oricell closes a ‘pre-IPO’ megaround to aim CAR-T at solid tumors", "source": "BioPharma Dive", "published": "2026-04-10 23:22", "publishedAt": "2026-04-10 23:22", "publishedEpochMs": 1775834520000, "relevance": null, "importance": null, "summary": "The Shanghai-based biotech has a cell therapy that, if successful in testing, could become the first treatment of its kind for liver cancer.", "reason": null, "link": "https://www.biopharmadive.com/news/oricell-car-t-liver-cancer-china-ipo-financing/817199/"}, {"title": "Vivatides gets $54M; Wegovy drops cold chain in EU; Gilead takes Kymera option", "source": "Endpoints News", "published": "2026-04-10 23:13", "publishedAt": "2026-04-10 23:13", "publishedEpochMs": 1775833980000, "relevance": null, "importance": null, "summary": "New China-US biotech gets $54M: Vivatides Therapeutics raised the Series A for its preclinical-stage R&D in siRNA and antisense oligonucleotides aimed at reaching tissues beyond the liver. Vivatides’ investors include ...", "reason": null, "link": "https://endpoints.news/vivatides-gets-54m-wegovy-drops-cold-chain-in-eu-gilead-takes-kymera-option/"}, {"title": "Biotech VCs ramp up checks on new bets after years of focusing on existing portfolios", "source": "Endpoints News", "published": "2026-04-10 22:27", "publishedAt": "2026-04-10 22:27", "publishedEpochMs": 1775831220000, "relevance": null, "importance": null, "summary": "Biotech venture capitalists are embracing risk again, signaling a reversal from the past few years. VCs are placing more bets on flashy new biotech opportunities in the first quarter of 2026. About 65% of investments ...", "reason": null, "link": "https://endpoints.news/biotech-vcs-ramp-up-checks-on-new-bets-after-years-of-focusing-on-existing-portfolios/"}, {"title": "STAT+: A new trick for old science, and biotech VCs’ scrambled playbook", "source": "STAT News", "published": "2026-04-10 21:38", "publishedAt": "2026-04-10 21:38", "publishedEpochMs": 1775828280000, "relevance": null, "importance": null, "summary": "CAR-T promise in autoimmunity, GSK's goodbye to leucovorin, and more biotech news", "reason": null, "link": "https://www.statnews.com/2026/04/10/biotech-news-vcs-scrambled-playbook-china-us/?utm_campaign=rss"}, {"title": "China-based CAR-T company Oricell raises $40M more as it looks to go public", "source": "Endpoints News", "published": "2026-04-10 18:28", "publishedAt": "2026-04-10 18:28", "publishedEpochMs": 1775816880000, "relevance": null, "importance": null, "summary": "Oricell Therapeutics has raised more than $110 million in what it calls a pre-IPO financing. The company is developing CAR-T therapies for solid tumors, including a GPC3-targeted autologous CAR-T therapy for a type of liver ...", "reason": null, "link": "https://endpoints.news/china-based-car-t-company-oricell-raises-40m-more-as-it-looks-to-go-public/"}, {"title": "A new trick for old science, and biotech VCs’ scrambled playbook", "source": "STAT News", "published": "2026-04-10 03:01", "publishedAt": "2026-04-10 03:01", "publishedEpochMs": 1775761260000, "relevance": null, "importance": null, "summary": "This week on \"The Readout LOUD\": Why is old exon science getting new traction? What’s unsettling biotech VCs? And who will be the next CEO of PhRMA?", "reason": null, "link": "https://www.statnews.com/2026/04/09/duchenne-exon-skipping-biotech-venture-captial-readout-loud-podcast/?utm_campaign=rss"}, {"title": "Post-Hoc Live: Biopharma M&A is back, with Barclays' Emily Field", "source": "Endpoints News", "published": "2026-04-10 02:12", "publishedAt": "2026-04-10 02:12", "publishedEpochMs": 1775758320000, "relevance": null, "importance": null, "summary": "Deals deals deals. Biopharma M&A is having one of its best stretches in years, as big pharma buyers snap up smaller biotechs. Today on Post-Hoc Live, I spoke with Emily Field, head ...", "reason": null, "link": "https://endpoints.news/post-hoc-live-biopharma-ma-is-back-with-barclays-emily-field/"}, {"title": "Chasing a tough-to-treat lung disease, Avalyn plans an IPO", "source": "BioPharma Dive", "published": "2026-04-09 23:42", "publishedAt": "2026-04-09 23:42", "publishedEpochMs": 1775749320000, "relevance": null, "importance": null, "summary": "Backed by Novo Holdings and multiple other prominent investors, the biotech is developing what it’s positioning as superior versions of entrenched — but flawed — medicines for idiopathic pulmonary fibrosis.", "reason": null, "link": "https://www.biopharmadive.com/news/avalyn-pharma-ipo-idiopathic-pulmonary-fibrosis/817072/"}]}</script>
+  <script>
+    const data = JSON.parse(document.getElementById('report-data').textContent);
+    const els = {
+      title: document.getElementById('report-title'),
+      request: document.getElementById('report-request'),
+      metaRow: document.getElementById('meta-row'),
+      statCount: document.getElementById('stat-count'),
+      statSources: document.getElementById('stat-sources'),
+      statRelevance: document.getElementById('stat-relevance'),
+      source: document.getElementById('source'),
+      search: document.getElementById('search'),
+      relevance: document.getElementById('relevance'),
+      relevanceValue: document.getElementById('relevance-value'),
+      list: document.getElementById('list'),
+      empty: document.getElementById('empty'),
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function chip(text) {
+      return `<span class="chip">${escapeHtml(text)}</span>`;
+    }
+
+    function badge(text, className='') {
+      return `<span class="badge ${className}">${escapeHtml(text)}</span>`;
+    }
+
+    function renderHeader() {
+      els.title.textContent = data.title || 'News Digest';
+      els.request.textContent = data.request ? `Request: ${data.request}` : 'Interactive report view';
+      const meta = [];
+      if (data.coverage) meta.push(chip(data.coverage));
+      if (data.reviewed) meta.push(chip(data.reviewed));
+      els.metaRow.innerHTML = meta.join('');
+
+      const withRelevance = data.articles.filter(a => Number.isFinite(a.relevance));
+      const avgRelevance = withRelevance.length
+        ? Math.round(withRelevance.reduce((sum, a) => sum + a.relevance, 0) / withRelevance.length)
+        : null;
+      els.statCount.textContent = String(data.articleCount || data.articles.length || 0);
+      els.statSources.textContent = String((data.sources || []).length);
+      els.statRelevance.textContent = avgRelevance === null ? '—' : String(avgRelevance);
+
+      for (const source of data.sources || []) {
+        const option = document.createElement('option');
+        option.value = source;
+        option.textContent = source;
+        els.source.appendChild(option);
+      }
+    }
+
+    function matches(article) {
+      const term = els.search.value.trim().toLowerCase();
+      const source = els.source.value;
+      const minRelevance = Number(els.relevance.value || 0);
+      const articleRelevance = Number.isFinite(article.relevance) ? article.relevance : 0;
+      if (source && article.source !== source) return false;
+      if (articleRelevance < minRelevance) return false;
+      if (!term) return true;
+      const haystack = [article.title, article.summary, article.reason, article.source]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      return haystack.includes(term);
+    }
+
+    function articleCard(article) {
+      const meta = [];
+      if (article.source) meta.push(badge(article.source));
+      if (article.published) meta.push(badge(article.published));
+      if (Number.isFinite(article.relevance)) meta.push(badge(`Relevance ${article.relevance}`, 'score-badge'));
+      if (Number.isFinite(article.importance)) meta.push(badge(`Importance ${article.importance}`, 'importance-badge'));
+      const title = article.link
+        ? `<a href="${escapeHtml(article.link)}" target="_blank" rel="noreferrer">${escapeHtml(article.title)}</a>`
+        : escapeHtml(article.title);
+      const summary = article.summary ? `<p class="summary">${escapeHtml(article.summary)}</p>` : '';
+      const reason = article.reason ? `<div class="reason">Why it matters: ${escapeHtml(article.reason)}</div>` : '';
+      return `
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>${title}</h2>
+              <div class="card-meta">${meta.join('')}</div>
+            </div>
+          </div>
+          ${summary}
+          ${reason}
+        </article>
+      `;
+    }
+
+    function sectionBlock(title, subtitle, articles) {
+      if (!articles.length) return '';
+      return `
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title">${escapeHtml(title)}</h2>
+            <div class="section-sub">${escapeHtml(subtitle)}</div>
+          </div>
+          ${articles.map(articleCard).join('')}
+        </section>
+      `;
+    }
+
+    function getReferenceTimeMs(articles) {
+      if (Number.isFinite(data.generatedAtEpochMs)) return data.generatedAtEpochMs;
+      const timestamps = articles.map(article => article.publishedEpochMs).filter(Number.isFinite);
+      if (timestamps.length) return Math.max(...timestamps);
+      return Date.now();
+    }
+
+    function compareByTimeDesc(a, b) {
+      const aTime = Number.isFinite(a.publishedEpochMs) ? a.publishedEpochMs : -1;
+      const bTime = Number.isFinite(b.publishedEpochMs) ? b.publishedEpochMs : -1;
+      return bTime - aTime || (b.importance ?? -1) - (a.importance ?? -1) || (b.relevance ?? -1) - (a.relevance ?? -1);
+    }
+
+    function renderList() {
+      els.relevanceValue.textContent = els.relevance.value;
+      const filtered = (data.articles || []).filter(matches);
+      const referenceTimeMs = getReferenceTimeMs(filtered);
+      const dayMs = 24 * 60 * 60 * 1000;
+      const weekMs = 7 * dayMs;
+
+      const latest = [];
+      const thisWeek = [];
+      const older = [];
+
+      for (const article of filtered) {
+        if (!Number.isFinite(article.publishedEpochMs)) {
+          older.push(article);
+          continue;
+        }
+        const ageMs = referenceTimeMs - article.publishedEpochMs;
+        if (ageMs <= dayMs) latest.push(article);
+        else if (ageMs <= weekMs) thisWeek.push(article);
+        else older.push(article);
+      }
+
+      latest.sort(compareByTimeDesc);
+      thisWeek.sort(compareByTimeDesc);
+      older.sort(compareByTimeDesc);
+
+      const sections = [
+        sectionBlock('Latest news, last 24 hours', `${latest.length} article${latest.length === 1 ? '' : 's'}`, latest),
+        sectionBlock('Earlier this week', `${thisWeek.length} article${thisWeek.length === 1 ? '' : 's'}`, thisWeek),
+        sectionBlock('Older / undated', `${older.length} article${older.length === 1 ? '' : 's'}`, older),
+      ].filter(Boolean);
+
+      els.list.innerHTML = sections.join('');
+      els.empty.hidden = filtered.length > 0;
+    }
+
+    renderHeader();
+    renderList();
+    els.search.addEventListener('input', renderList);
+    els.source.addEventListener('change', renderList);
+    els.relevance.addEventListener('input', renderList);
+  </script>
+</body>
+</html>

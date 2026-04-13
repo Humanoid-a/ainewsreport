@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI-Filtered News Digest</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0b1020;
+      --panel: #121931;
+      --panel-2: #18213f;
+      --text: #ecf2ff;
+      --muted: #a9b5d4;
+      --accent: #70a5ff;
+      --accent-2: #7ef0c2;
+      --border: rgba(255,255,255,0.08);
+      --chip: rgba(255,255,255,0.08);
+      --shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #0a0f1f 0%, #0e1730 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+    .hero {
+      background: linear-gradient(135deg, rgba(112,165,255,0.16), rgba(126,240,194,0.10));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; }
+    .sub { color: var(--muted); margin: 8px 0 0; line-height: 1.5; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .chip {
+      background: var(--chip);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+    }
+    .stat-label { color: var(--muted); font-size: 13px; }
+    .stat-value { font-size: 28px; font-weight: 700; margin-top: 6px; }
+    .controls {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+    }
+    .control {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .control label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .control input, .control select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+    .range-line { display: flex; align-items: center; gap: 10px; }
+    .range-line input { flex: 1; }
+    .range-value { min-width: 36px; text-align: right; color: var(--accent-2); font-weight: 600; }
+    .list { display: grid; gap: 28px; margin-top: 22px; }
+    .section { display: grid; gap: 16px; }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+    }
+    .section-title { margin: 0; font-size: 22px; }
+    .section-sub { color: var(--muted); font-size: 14px; }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .card-head { display: flex; gap: 16px; justify-content: space-between; align-items: flex-start; }
+    .card h2 { margin: 0; font-size: 22px; line-height: 1.2; }
+    .card a { color: var(--text); text-decoration: none; }
+    .card a:hover { color: var(--accent); }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .badge {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .score-badge { color: var(--text); background: rgba(112,165,255,0.12); }
+    .importance-badge { color: var(--text); background: rgba(126,240,194,0.12); }
+    .summary { margin: 16px 0 10px; color: #f5f8ff; line-height: 1.6; }
+    .reason { color: var(--muted); font-size: 14px; }
+    .empty {
+      margin-top: 22px;
+      padding: 28px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+    @media (max-width: 860px) {
+      .controls { grid-template-columns: 1fr; }
+      .card-head { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1 id="report-title"></h1>
+      <p class="sub" id="report-request"></p>
+      <div class="meta-row" id="meta-row"></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Articles</div><div class="stat-value" id="stat-count">0</div></div>
+        <div class="stat"><div class="stat-label">Sources</div><div class="stat-value" id="stat-sources">0</div></div>
+        <div class="stat"><div class="stat-label">Avg relevance</div><div class="stat-value" id="stat-relevance">—</div></div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="control">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Search titles, summaries, reasons...">
+      </div>
+      <div class="control">
+        <label for="source">Source</label>
+        <select id="source">
+          <option value="">All sources</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="relevance">Minimum relevance</label>
+        <div class="range-line">
+          <input id="relevance" type="range" min="0" max="100" value="0">
+          <div class="range-value" id="relevance-value">0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="list" id="list"></section>
+    <div class="empty" id="empty" hidden>No articles match the current filters.</div>
+  </div>
+
+  <script id="report-data" type="application/json">{"title": "AI-Filtered News Digest", "request": "important oncology news and developments this week", "coverage": "last 7 days", "reviewed": "Reviewed 50 candidate articles, kept 12.", "generatedAt": "2026-04-13T11:26:07.634539+08:00", "generatedAtEpochMs": 1776050767634, "timezone": "Asia/Shanghai", "articleCount": 12, "sources": ["BioPharma Dive", "Endpoints News", "STAT News"], "articles": [{"title": "GSK plans five Phase 3 studies for gynecological cancer ADC from Hansoh", "source": "Endpoints News", "published": "2026-04-12 22:10", "publishedAt": "2026-04-12T22:10:11+08:00", "publishedEpochMs": 1776003011000, "relevance": 90, "importance": 85, "summary": "GSK plans five Phase 3 studies for a gynecological cancer antibody-drug conjugate licensed from Hansoh Pharma.", "reason": "Important oncology clinical trial developments this week.", "link": "https://endpoints.news/gsk-plans-five-phase-3-studies-for-gynecological-cancer-adc-from-hansoh/"}, {"title": "STAT+: Replimune skin cancer drug that became FDA flashpoint is rejected again", "source": "STAT News", "published": "2026-04-10 23:23", "publishedAt": "2026-04-10T23:23:00+08:00", "publishedEpochMs": 1775834580000, "relevance": 90, "importance": 85, "summary": "FDA again rejects Replimune's engineered virus treatment for advanced skin cancer, highlighting regulatory shifts under new leadership.", "reason": "Important FDA decision on a novel skin cancer therapy affects oncology treatment landscape.", "link": "https://www.statnews.com/2026/04/10/skin-cancer-replimune-fda-approval/?utm_campaign=rss"}, {"title": "FDA rejects Replimune cancer therapy, saying company didn't resolve trial doubts", "source": "Endpoints News", "published": "2026-04-11 00:16", "publishedAt": "2026-04-11T00:16:03+08:00", "publishedEpochMs": 1775837763000, "relevance": 85, "importance": 80, "summary": "FDA rejects Replimune’s oncolytic virus therapy for advanced melanoma due to unresolved trial doubts.", "reason": "Significant regulatory update on oncology drug.", "link": "https://endpoints.news/fda-rejects-replimune-cancer-therapy-saying-company-didnt-resolve-trial-doubts/"}, {"title": "China biotech’s CRISPR therapy suggests US drugmakers will face competition", "source": "Endpoints News", "published": "2026-04-10 23:54", "publishedAt": "2026-04-10T23:54:15+08:00", "publishedEpochMs": 1775836455000, "relevance": 85, "importance": 80, "summary": "Chinese biotech's CRISPR therapy for beta thalassemia shows promise, potentially cheaper and safer, impacting competition in gene therapies.", "reason": "Significant gene therapy development relevant to oncology and biotech competition.", "link": "https://endpoints.news/china-biotechs-crispr-therapy-suggests-us-drugmakers-will-face-competition/"}, {"title": "China-based CAR-T company Oricell raises $40M more as it looks to go public", "source": "Endpoints News", "published": "2026-04-10 18:28", "publishedAt": "2026-04-10T18:28:17+08:00", "publishedEpochMs": 1775816897000, "relevance": 85, "importance": 80, "summary": "Oricell Therapeutics raises $40M in pre-IPO financing; developing CAR-T therapies for solid tumors including liver cancer.", "reason": "Important oncology development involving CAR-T therapies for solid tumors.", "link": "https://endpoints.news/china-based-car-t-company-oricell-raises-40m-more-as-it-looks-to-go-public/"}, {"title": "FDA lifts MacroGenics hold; Oxford and Bristol Myers team up", "source": "Endpoints News", "published": "2026-04-09 23:10", "publishedAt": "2026-04-09T23:10:37+08:00", "publishedEpochMs": 1775747437000, "relevance": 85, "importance": 80, "summary": "FDA lifts partial hold on MacroGenics cancer drug trial; Oxford and Bristol Myers collaborate on oncology.", "reason": "Important oncology drug trial update and major pharma collaboration.", "link": "https://endpoints.news/fda-lifts-macrogenics-hold-oxford-and-bristol-myers-team-up/"}, {"title": "Roche dips into DACs with existing partner C4 Therapeutics for $20M upfront", "source": "Endpoints News", "published": "2026-04-09 22:17", "publishedAt": "2026-04-09T22:17:59+08:00", "publishedEpochMs": 1775744279000, "relevance": 85, "importance": 80, "summary": "Roche invests $20M upfront with C4 Therapeutics to develop degrader-based cancer therapies, advancing antibody-drug conjugate modalities.", "reason": "Important oncology development involving novel cancer drug modalities.", "link": "https://endpoints.news/roche-dips-into-dacs-with-existing-partner-c4-therapeutics-for-20m-upfront/"}, {"title": "FDA again spurns Replimune melanoma drug", "source": "BioPharma Dive", "published": "2026-04-11 00:13", "publishedAt": "2026-04-11T00:13:00+08:00", "publishedEpochMs": 1775837580000, "relevance": 80, "importance": 75, "summary": "FDA again rejects Replimune melanoma drug citing unresolved study issues.", "reason": "Additional coverage of important oncology drug regulatory decision.", "link": "https://www.biopharmadive.com/news/replimune-fda-reject-melanoma-rp1/816659/"}, {"title": "Oricell closes a ‘pre-IPO’ megaround to aim CAR-T at solid tumors", "source": "BioPharma Dive", "published": "2026-04-10 23:22", "publishedAt": "2026-04-10T23:22:00+08:00", "publishedEpochMs": 1775834520000, "relevance": 80, "importance": 75, "summary": "Shanghai biotech Oricell raises funds to develop CAR-T therapy targeting solid tumors, potentially first for liver cancer.", "reason": "New CAR-T therapy development for solid tumors is a key oncology advancement.", "link": "https://www.biopharmadive.com/news/oricell-car-t-liver-cancer-china-ipo-financing/817199/"}, {"title": "STAT+: 5 years after lupus breakthrough, CAR-T is still surprising autoimmunity researchers", "source": "STAT News", "published": "2026-04-09 23:00", "publishedAt": "2026-04-09T23:00:00+08:00", "publishedEpochMs": 1775746800000, "relevance": 80, "importance": 75, "summary": "Five years after lupus breakthrough, CAR-T therapy continues to advance autoimmune disease research.", "reason": "Relevant immunotherapy advances with oncology-related CAR-T technology.", "link": "https://www.statnews.com/2026/04/09/autoimmune-diseases-car-t-therapy-advances/?utm_campaign=rss"}, {"title": "Sidewinder secures $137M to advance ‘precision’ ADCs", "source": "BioPharma Dive", "published": "2026-04-09 01:05", "publishedAt": "2026-04-09T01:05:00+08:00", "publishedEpochMs": 1775667900000, "relevance": 80, "importance": 75, "summary": "Sidewinder secures $137M funding to advance precision antibody-drug conjugates, expanding cancer therapy options.", "reason": "Significant oncology development in antibody-drug conjugate technology.", "link": "https://www.biopharmadive.com/news/sidewinder-bispecific-antibody-drug-conjugates-orbimed-financing/816942/"}, {"title": "More pharma dealmaking; FDA’s proposed budget; Takeda ends partnership; and more", "source": "Endpoints News", "published": "2026-04-11 18:00", "publishedAt": "2026-04-11T18:00:58+08:00", "publishedEpochMs": 1775901658000, "relevance": 75, "importance": 70, "summary": "Endpoints Weekly previews upcoming major oncology conferences AACR and ASCO and pharma dealmaking news.", "reason": "Relevant oncology industry updates and conference news.", "link": "https://endpoints.news/more-pharma-dealmaking-fdas-proposed-budget-takeda-ends-partnership-and-more/"}]}</script>
+  <script>
+    const data = JSON.parse(document.getElementById('report-data').textContent);
+    const els = {
+      title: document.getElementById('report-title'),
+      request: document.getElementById('report-request'),
+      metaRow: document.getElementById('meta-row'),
+      statCount: document.getElementById('stat-count'),
+      statSources: document.getElementById('stat-sources'),
+      statRelevance: document.getElementById('stat-relevance'),
+      source: document.getElementById('source'),
+      search: document.getElementById('search'),
+      relevance: document.getElementById('relevance'),
+      relevanceValue: document.getElementById('relevance-value'),
+      list: document.getElementById('list'),
+      empty: document.getElementById('empty'),
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function chip(text) {
+      return `<span class="chip">${escapeHtml(text)}</span>`;
+    }
+
+    function badge(text, className='') {
+      return `<span class="badge ${className}">${escapeHtml(text)}</span>`;
+    }
+
+    function renderHeader() {
+      els.title.textContent = data.title || 'News Digest';
+      els.request.textContent = data.request ? `Request: ${data.request}` : 'Interactive report view';
+      const meta = [];
+      if (data.coverage) meta.push(chip(data.coverage));
+      if (data.reviewed) meta.push(chip(data.reviewed));
+      els.metaRow.innerHTML = meta.join('');
+
+      const withRelevance = data.articles.filter(a => Number.isFinite(a.relevance));
+      const avgRelevance = withRelevance.length
+        ? Math.round(withRelevance.reduce((sum, a) => sum + a.relevance, 0) / withRelevance.length)
+        : null;
+      els.statCount.textContent = String(data.articleCount || data.articles.length || 0);
+      els.statSources.textContent = String((data.sources || []).length);
+      els.statRelevance.textContent = avgRelevance === null ? '—' : String(avgRelevance);
+
+      for (const source of data.sources || []) {
+        const option = document.createElement('option');
+        option.value = source;
+        option.textContent = source;
+        els.source.appendChild(option);
+      }
+    }
+
+    function matches(article) {
+      const term = els.search.value.trim().toLowerCase();
+      const source = els.source.value;
+      const minRelevance = Number(els.relevance.value || 0);
+      const articleRelevance = Number.isFinite(article.relevance) ? article.relevance : 0;
+      if (source && article.source !== source) return false;
+      if (articleRelevance < minRelevance) return false;
+      if (!term) return true;
+      const haystack = [article.title, article.summary, article.reason, article.source]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      return haystack.includes(term);
+    }
+
+    function articleCard(article) {
+      const meta = [];
+      if (article.source) meta.push(badge(article.source));
+      if (article.published) meta.push(badge(article.published));
+      if (Number.isFinite(article.relevance)) meta.push(badge(`Relevance ${article.relevance}`, 'score-badge'));
+      if (Number.isFinite(article.importance)) meta.push(badge(`Importance ${article.importance}`, 'importance-badge'));
+      const title = article.link
+        ? `<a href="${escapeHtml(article.link)}" target="_blank" rel="noreferrer">${escapeHtml(article.title)}</a>`
+        : escapeHtml(article.title);
+      const summary = article.summary ? `<p class="summary">${escapeHtml(article.summary)}</p>` : '';
+      const reason = article.reason ? `<div class="reason">Why it matters: ${escapeHtml(article.reason)}</div>` : '';
+      return `
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>${title}</h2>
+              <div class="card-meta">${meta.join('')}</div>
+            </div>
+          </div>
+          ${summary}
+          ${reason}
+        </article>
+      `;
+    }
+
+    function sectionBlock(title, subtitle, articles) {
+      if (!articles.length) return '';
+      return `
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title">${escapeHtml(title)}</h2>
+            <div class="section-sub">${escapeHtml(subtitle)}</div>
+          </div>
+          ${articles.map(articleCard).join('')}
+        </section>
+      `;
+    }
+
+    function getReferenceTimeMs(articles) {
+      if (Number.isFinite(data.generatedAtEpochMs)) return data.generatedAtEpochMs;
+      const timestamps = articles.map(article => article.publishedEpochMs).filter(Number.isFinite);
+      if (timestamps.length) return Math.max(...timestamps);
+      return Date.now();
+    }
+
+    function compareByTimeDesc(a, b) {
+      const aTime = Number.isFinite(a.publishedEpochMs) ? a.publishedEpochMs : -1;
+      const bTime = Number.isFinite(b.publishedEpochMs) ? b.publishedEpochMs : -1;
+      return bTime - aTime || (b.importance ?? -1) - (a.importance ?? -1) || (b.relevance ?? -1) - (a.relevance ?? -1);
+    }
+
+    function renderList() {
+      els.relevanceValue.textContent = els.relevance.value;
+      const filtered = (data.articles || []).filter(matches);
+      const referenceTimeMs = getReferenceTimeMs(filtered);
+      const dayMs = 24 * 60 * 60 * 1000;
+      const weekMs = 7 * dayMs;
+
+      const latest = [];
+      const thisWeek = [];
+      const older = [];
+
+      for (const article of filtered) {
+        if (!Number.isFinite(article.publishedEpochMs)) {
+          older.push(article);
+          continue;
+        }
+        const ageMs = referenceTimeMs - article.publishedEpochMs;
+        if (ageMs <= dayMs) latest.push(article);
+        else if (ageMs <= weekMs) thisWeek.push(article);
+        else older.push(article);
+      }
+
+      latest.sort(compareByTimeDesc);
+      thisWeek.sort(compareByTimeDesc);
+      older.sort(compareByTimeDesc);
+
+      const sections = [
+        sectionBlock('Latest news, last 24 hours', `${latest.length} article${latest.length === 1 ? '' : 's'}`, latest),
+        sectionBlock('Earlier this week', `${thisWeek.length} article${thisWeek.length === 1 ? '' : 's'}`, thisWeek),
+        sectionBlock('Older / undated', `${older.length} article${older.length === 1 ? '' : 's'}`, older),
+      ].filter(Boolean);
+
+      els.list.innerHTML = sections.join('');
+      els.empty.hidden = filtered.length > 0;
+    }
+
+    renderHeader();
+    renderList();
+    els.search.addEventListener('input', renderList);
+    els.source.addEventListener('change', renderList);
+    els.relevance.addEventListener('input', renderList);
+  </script>
+</body>
+</html>

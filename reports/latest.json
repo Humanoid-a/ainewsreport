@@ -1,0 +1,179 @@
+{
+  "reportVersion": 1,
+  "title": "AI-Filtered News Digest",
+  "request": "important oncology news and developments this week",
+  "generatedAt": "2026-04-13T11:26:07.634539+08:00",
+  "timezone": "Asia/Shanghai",
+  "coverage": {
+    "days": 7,
+    "label": "last 7 days"
+  },
+  "model": "gpt-4.1-mini",
+  "stats": {
+    "reviewed": 50,
+    "kept": 12
+  },
+  "sources": [
+    "BioPharma Dive",
+    "Endpoints News",
+    "STAT News"
+  ],
+  "articles": [
+    {
+      "id": "a002",
+      "title": "GSK plans five Phase 3 studies for gynecological cancer ADC from Hansoh",
+      "url": "https://endpoints.news/gsk-plans-five-phase-3-studies-for-gynecological-cancer-adc-from-hansoh/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-12T22:10:11+08:00",
+      "publishedLabel": "2026-04-12 22:10",
+      "relevance": 90,
+      "importance": 85,
+      "summary": "GSK plans five Phase 3 studies for a gynecological cancer antibody-drug conjugate licensed from Hansoh Pharma.",
+      "whyItMatters": "Important oncology clinical trial developments this week.",
+      "rssSummary": "GSK shared early promising data Sunday from the antibody-drug conjugate it licensed from its Chinese partner Hansoh Pharma. The UK company now plans to start studying the asset in five Phase 3 studies in gynecological ..."
+    },
+    {
+      "id": "a012",
+      "title": "STAT+: Replimune skin cancer drug that became FDA flashpoint is rejected again",
+      "url": "https://www.statnews.com/2026/04/10/skin-cancer-replimune-fda-approval/?utm_campaign=rss",
+      "source": "STAT News",
+      "publishedAt": "2026-04-10T23:23:00+08:00",
+      "publishedLabel": "2026-04-10 23:23",
+      "relevance": 90,
+      "importance": 85,
+      "summary": "FDA again rejects Replimune's engineered virus treatment for advanced skin cancer, highlighting regulatory shifts under new leadership.",
+      "whyItMatters": "Important FDA decision on a novel skin cancer therapy affects oncology treatment landscape.",
+      "rssSummary": "The Food and Drug Administration on Friday rejected — again — an experimental treatment for advanced skin cancer developed by Replimune Group. Replimune’s treatment, an engineered virus designed to rev up the immune system against melanoma, has been a flashpoint in a simmering debate over shifting standards at the agency. The drug was initially rejected in July , just two months after Vinay Prasad was appointed the FDA’s head of biologics. As an academic oncologist, Prasad criticized regulators for approving drugs with limited data, and the Replimune decision was viewed as a possible sign of the stricter stance he might take at the agency. Continue to STAT+ to read the full story…"
+    },
+    {
+      "id": "a008",
+      "title": "FDA rejects Replimune cancer therapy, saying company didn't resolve trial doubts",
+      "url": "https://endpoints.news/fda-rejects-replimune-cancer-therapy-saying-company-didnt-resolve-trial-doubts/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-11T00:16:03+08:00",
+      "publishedLabel": "2026-04-11 00:16",
+      "relevance": 85,
+      "importance": 80,
+      "summary": "FDA rejects Replimune’s oncolytic virus therapy for advanced melanoma due to unresolved trial doubts.",
+      "whyItMatters": "Significant regulatory update on oncology drug.",
+      "rssSummary": "The FDA has once again rejected Replimune’s oncolytic virus therapy to treat advanced melanoma. The Massachusetts-based drugmaker had been pushing for a reconsideration by the agency since the therapy was first rejected last July. At ..."
+    },
+    {
+      "id": "a011",
+      "title": "China biotech’s CRISPR therapy suggests US drugmakers will face competition",
+      "url": "https://endpoints.news/china-biotechs-crispr-therapy-suggests-us-drugmakers-will-face-competition/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-10T23:54:15+08:00",
+      "publishedLabel": "2026-04-10 23:54",
+      "relevance": 85,
+      "importance": 80,
+      "summary": "Chinese biotech's CRISPR therapy for beta thalassemia shows promise, potentially cheaper and safer, impacting competition in gene therapies.",
+      "whyItMatters": "Significant gene therapy development relevant to oncology and biotech competition.",
+      "rssSummary": "Five people with beta thalassemia who had their blood stem cells genetically altered no longer require regular blood transfusions to stay healthy. Their Chinese-made treatment is likely to be cheaper, and perhaps safer and more ..."
+    },
+    {
+      "id": "a024",
+      "title": "China-based CAR-T company Oricell raises $40M more as it looks to go public",
+      "url": "https://endpoints.news/china-based-car-t-company-oricell-raises-40m-more-as-it-looks-to-go-public/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-10T18:28:17+08:00",
+      "publishedLabel": "2026-04-10 18:28",
+      "relevance": 85,
+      "importance": 80,
+      "summary": "Oricell Therapeutics raises $40M in pre-IPO financing; developing CAR-T therapies for solid tumors including liver cancer.",
+      "whyItMatters": "Important oncology development involving CAR-T therapies for solid tumors.",
+      "rssSummary": "Oricell Therapeutics has raised more than $110 million in what it calls a pre-IPO financing. The company is developing CAR-T therapies for solid tumors, including a GPC3-targeted autologous CAR-T therapy for a type of liver ..."
+    },
+    {
+      "id": "a038",
+      "title": "FDA lifts MacroGenics hold; Oxford and Bristol Myers team up",
+      "url": "https://endpoints.news/fda-lifts-macrogenics-hold-oxford-and-bristol-myers-team-up/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-09T23:10:37+08:00",
+      "publishedLabel": "2026-04-09 23:10",
+      "relevance": 85,
+      "importance": 80,
+      "summary": "FDA lifts partial hold on MacroGenics cancer drug trial; Oxford and Bristol Myers collaborate on oncology.",
+      "whyItMatters": "Important oncology drug trial update and major pharma collaboration.",
+      "rssSummary": "Plus, news about Boston Oncology, Garda and Assertio, an Everest deal and Forte's raise: 🟢 FDA ends partial hold on MacroGenics cancer drug: In February, the agency stopped a Phase 2 trial of lorigerlimab after ..."
+    },
+    {
+      "id": "a044",
+      "title": "Roche dips into DACs with existing partner C4 Therapeutics for $20M upfront",
+      "url": "https://endpoints.news/roche-dips-into-dacs-with-existing-partner-c4-therapeutics-for-20m-upfront/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-09T22:17:59+08:00",
+      "publishedLabel": "2026-04-09 22:17",
+      "relevance": 85,
+      "importance": 80,
+      "summary": "Roche invests $20M upfront with C4 Therapeutics to develop degrader-based cancer therapies, advancing antibody-drug conjugate modalities.",
+      "whyItMatters": "Important oncology development involving novel cancer drug modalities.",
+      "rssSummary": "While antibody-drug conjugates have had their moment in the sun for the past few years, a degrader twist on the hot cancer modality is gathering steam. Roche is further delving into its decade-long partnership with ..."
+    },
+    {
+      "id": "a009",
+      "title": "FDA again spurns Replimune melanoma drug",
+      "url": "https://www.biopharmadive.com/news/replimune-fda-reject-melanoma-rp1/816659/",
+      "source": "BioPharma Dive",
+      "publishedAt": "2026-04-11T00:13:00+08:00",
+      "publishedLabel": "2026-04-11 00:13",
+      "relevance": 80,
+      "importance": 75,
+      "summary": "FDA again rejects Replimune melanoma drug citing unresolved study issues.",
+      "whyItMatters": "Additional coverage of important oncology drug regulatory decision.",
+      "rssSummary": "The decision, which has been a flashpoint in an ongoing debate about regulatory flexibility, was made because Replimune failed to address the agency's issues with the drug's study results, the FDA said."
+    },
+    {
+      "id": "a013",
+      "title": "Oricell closes a ‘pre-IPO’ megaround to aim CAR-T at solid tumors",
+      "url": "https://www.biopharmadive.com/news/oricell-car-t-liver-cancer-china-ipo-financing/817199/",
+      "source": "BioPharma Dive",
+      "publishedAt": "2026-04-10T23:22:00+08:00",
+      "publishedLabel": "2026-04-10 23:22",
+      "relevance": 80,
+      "importance": 75,
+      "summary": "Shanghai biotech Oricell raises funds to develop CAR-T therapy targeting solid tumors, potentially first for liver cancer.",
+      "whyItMatters": "New CAR-T therapy development for solid tumors is a key oncology advancement.",
+      "rssSummary": "The Shanghai-based biotech has a cell therapy that, if successful in testing, could become the first treatment of its kind for liver cancer."
+    },
+    {
+      "id": "a040",
+      "title": "STAT+: 5 years after lupus breakthrough, CAR-T is still surprising autoimmunity researchers",
+      "url": "https://www.statnews.com/2026/04/09/autoimmune-diseases-car-t-therapy-advances/?utm_campaign=rss",
+      "source": "STAT News",
+      "publishedAt": "2026-04-09T23:00:00+08:00",
+      "publishedLabel": "2026-04-09 23:00",
+      "relevance": 80,
+      "importance": 75,
+      "summary": "Five years after lupus breakthrough, CAR-T therapy continues to advance autoimmune disease research.",
+      "whyItMatters": "Relevant immunotherapy advances with oncology-related CAR-T technology.",
+      "rssSummary": "Georg Schett had two things: a young patient deathly ill with lupus, and a couple of mouse studies raising the possibility that special T cells could tame the condition. The German physician-scientist could produce the cells — chimeric antigen receptors, or CARs — at his institution, which was half the battle. Another hurdle: The patient’s parents. “They were like, ‘Don’t do that. You’re crazy,’” recalled Fabian Müller, Schett’s collaborator at the University of Erlangen-Nuremberg. A widespread fear at the time was that T cells would trigger or worsen autoimmune disease. The rest of the story is the rare scientific fairy tale: The patient got better. Five years on, she is still in remission, and working in the very clinic where she was treated. Her case upended the world of autoimmune disease, driving a flood of experimentation and investment and offering new hope to millions of patients. Continue to STAT+ to read the full story…"
+    },
+    {
+      "id": "a049",
+      "title": "Sidewinder secures $137M to advance ‘precision’ ADCs",
+      "url": "https://www.biopharmadive.com/news/sidewinder-bispecific-antibody-drug-conjugates-orbimed-financing/816942/",
+      "source": "BioPharma Dive",
+      "publishedAt": "2026-04-09T01:05:00+08:00",
+      "publishedLabel": "2026-04-09 01:05",
+      "relevance": 80,
+      "importance": 75,
+      "summary": "Sidewinder secures $137M funding to advance precision antibody-drug conjugates, expanding cancer therapy options.",
+      "whyItMatters": "Significant oncology development in antibody-drug conjugate technology.",
+      "rssSummary": "Backed by OrbiMed, Novartis’ venture arm and many other investors, the biotech is among those working on newer technology that could broaden the reach of antibody-drug conjugates."
+    },
+    {
+      "id": "a005",
+      "title": "More pharma dealmaking; FDA’s proposed budget; Takeda ends partnership; and more",
+      "url": "https://endpoints.news/more-pharma-dealmaking-fdas-proposed-budget-takeda-ends-partnership-and-more/",
+      "source": "Endpoints News",
+      "publishedAt": "2026-04-11T18:00:58+08:00",
+      "publishedLabel": "2026-04-11 18:00",
+      "relevance": 75,
+      "importance": 70,
+      "summary": "Endpoints Weekly previews upcoming major oncology conferences AACR and ASCO and pharma dealmaking news.",
+      "whyItMatters": "Relevant oncology industry updates and conference news.",
+      "rssSummary": "Welcome back to another edition of Endpoints Weekly. Two of the year’s major oncology conferences are coming up soon: AACR starting April 17, and ASCO at the end of May. We’re also hosting our New ..."
+    }
+  ]
+}
